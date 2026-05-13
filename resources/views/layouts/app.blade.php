@@ -14,14 +14,14 @@
             --gray-700: #333333;
             --gray-600: #666666;
             --gray-400: #a1a1a1;
-            --border: #222222;
+            --border: rgba(255, 255, 255, 0.1);
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            border-radius: 0 !important; /* Absolute sharp edges */
+            border-radius: 0 !important;
         }
 
         body {
@@ -31,6 +31,100 @@
             line-height: 1.5;
             -webkit-font-smoothing: grayscale;
             overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* Unified Global Aurora Background */
+        .global-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(
+                ellipse at 20% 30%,
+                rgba(138, 43, 226, 0.8) 0%,
+                rgba(138, 43, 226, 0) 60%
+                ),
+                radial-gradient(
+                ellipse at 80% 50%,
+                rgba(0, 191, 255, 0.7) 0%,
+                rgba(0, 191, 255, 0) 70%
+                ),
+                radial-gradient(
+                ellipse at 50% 80%,
+                rgba(50, 205, 50, 0.6) 0%,
+                rgba(50, 205, 50, 0) 65%
+                ),
+                linear-gradient(135deg, #000000 0%, #0a0520 100%);
+            background-blend-mode: overlay, screen, hard-light;
+            animation: aurora-drift 25s infinite alternate ease-in-out;
+            z-index: -1;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .global-bg::before {
+            content: "";
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            top: -50%;
+            left: -50%;
+            background: repeating-linear-gradient(
+                45deg,
+                rgba(255, 255, 255, 0.02) 0px,
+                rgba(255, 255, 255, 0.02) 1px,
+                transparent 1px,
+                transparent 40px
+                ),
+                repeating-linear-gradient(
+                -45deg,
+                rgba(255, 255, 255, 0.03) 0px,
+                rgba(255, 255, 255, 0.03) 1px,
+                transparent 1px,
+                transparent 60px
+                );
+            animation: grid-shift 20s linear infinite;
+        }
+
+        .global-bg::after {
+            content: "";
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(
+                circle at center,
+                transparent 70%,
+                rgba(10, 5, 32, 0.9) 100%
+            );
+            animation: aurora-pulse 8s infinite alternate;
+        }
+
+        @keyframes aurora-drift {
+            0% {
+                background-position: 0% 0%, 0% 0%, 0% 0%;
+                filter: hue-rotate(0deg) brightness(1);
+            }
+            50% {
+                background-position: -10% -5%, 5% 10%, 0% 15%;
+                filter: hue-rotate(30deg) brightness(1.2);
+            }
+            100% {
+                background-position: 5% 10%, -10% -5%, 15% 0%;
+                filter: hue-rotate(60deg) brightness(1);
+            }
+        }
+
+        @keyframes grid-shift {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(-50%, -50%); }
+        }
+
+        @keyframes aurora-pulse {
+            0% { opacity: 0.8; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.05); }
+            100% { opacity: 0.8; transform: scale(1); }
         }
 
         .mono {
@@ -41,6 +135,8 @@
         .app-wrapper {
             display: flex;
             min-height: 100vh;
+            position: relative;
+            z-index: 1;
         }
 
         nav.sidebar {
@@ -52,6 +148,8 @@
             justify-content: space-between;
             position: fixed;
             height: 100vh;
+            z-index: 100;
+            background: transparent; /* Shared background */
         }
 
         .brand {
@@ -69,29 +167,35 @@
         }
 
         .nav-links a {
-            color: var(--gray-400);
+            color: var(--white);
             text-decoration: none;
             font-size: 0.8rem;
             text-transform: uppercase;
             letter-spacing: 0.15em;
-            transition: color 0.3s ease;
+            transition: all 0.3s ease;
+            opacity: 0.5;
         }
 
         .nav-links a:hover, .nav-links a.active {
-            color: var(--white);
+            opacity: 1;
+            padding-left: 0.5rem;
+            border-left: 1px solid var(--white);
         }
 
         .nav-footer {
-            color: var(--gray-700);
+            color: var(--white);
             font-size: 0.65rem;
             letter-spacing: 0.1em;
             text-transform: uppercase;
+            opacity: 0.3;
         }
 
         main {
             margin-left: 280px;
             width: calc(100% - 280px);
             padding: 5rem 10% 5rem 5rem;
+            min-height: 100vh;
+            background: transparent; /* Shared background */
         }
 
         /* Typography */
@@ -114,7 +218,7 @@
             text-align: left;
             padding: 1rem 0;
             border-bottom: 1px solid var(--border);
-            color: var(--gray-600);
+            color: rgba(255, 255, 255, 0.4);
             font-size: 0.7rem;
             text-transform: uppercase;
             letter-spacing: 0.2em;
@@ -150,7 +254,7 @@
         .btn-text {
             border: none;
             padding: 0;
-            color: var(--gray-400);
+            color: rgba(255, 255, 255, 0.6);
             margin-right: 2rem;
         }
 
@@ -168,7 +272,7 @@
 
         .form-label {
             display: block;
-            color: var(--gray-600);
+            color: rgba(255, 255, 255, 0.4);
             font-size: 0.7rem;
             text-transform: uppercase;
             letter-spacing: 0.2em;
@@ -185,6 +289,22 @@
             font-size: 1.1rem;
             outline: none;
             transition: border-color 0.4s ease;
+            appearance: none; /* Remove default arrow */
+        }
+
+        select.form-control {
+            cursor: pointer;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='1' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right center;
+            background-size: 1.2rem;
+            padding-right: 2rem;
+        }
+
+        select.form-control option {
+            background-color: var(--gray-900);
+            color: var(--white);
+            padding: 1rem;
         }
 
         .form-control:focus {
@@ -216,9 +336,8 @@
             to { transform: translateX(0); }
         }
 
-        /* Nihilism Accents */
         .void-marker {
-            color: var(--gray-800);
+            color: rgba(255, 255, 255, 0.2);
             user-select: none;
             pointer-events: none;
         }
@@ -230,19 +349,23 @@
     </style>
 </head>
 <body>
+    <div class="global-bg"></div>
+
     <div class="app-wrapper">
         <nav class="sidebar">
             <div>
-                <div class="brand">Control <span class="void-marker">/ Void</span></div>
+                <div class="brand">Kontrol <span class="void-marker">/ Hampa</span></div>
                 <div class="nav-links">
-                    <a href="/" class="{{ request()->is('/') ? 'active' : '' }}">Existence</a>
-                    <a href="{{ route('supplier.index') }}" class="{{ request()->is('suppliers*') ? 'active' : '' }}">Origins</a>
-                    <a href="{{ route('produk.index') }}" class="{{ request()->is('produk*') ? 'active' : '' }}">Manifestations</a>
+                    <a href="/" class="{{ request()->is('/') ? 'active' : '' }}">Home</a>
+                    <a href="{{ route('supplier.index') }}" class="{{ request()->is('suppliers*') ? 'active' : '' }}">Suplier</a>
+                    <a href="{{ route('produk.index') }}" class="{{ request()->is('produk*') ? 'active' : '' }}">Produk</a>
                 </div>
             </div>
             <div class="nav-footer">
-                Nothingness is structured.
+                Ketiadaan yang terstruktur.
             </div>
+
+
         </nav>
 
         <main>
