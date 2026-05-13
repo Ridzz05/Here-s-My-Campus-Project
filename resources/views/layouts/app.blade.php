@@ -3,200 +3,265 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>System - @yield('title')</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <title>VOID - @yield('title')</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=JetBrains+Mono:wght@300&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-color: #000000;
-            --text-main: #ffffff;
-            --text-muted: #888888;
-            --border: rgba(255, 255, 255, 0.1);
-            --bg-hover: rgba(255, 255, 255, 0.05);
+            --black: #000000;
+            --white: #ffffff;
+            --gray-900: #0a0a0a;
+            --gray-800: #1a1a1a;
+            --gray-700: #333333;
+            --gray-600: #666666;
+            --gray-400: #a1a1a1;
+            --border: #222222;
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Inter', -apple-system, sans-serif;
+            border-radius: 0 !important; /* Absolute sharp edges */
         }
 
         body {
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            line-height: 1.6;
-            -webkit-font-smoothing: antialiased;
+            background-color: var(--black);
+            color: var(--white);
+            font-family: 'Inter', sans-serif;
+            line-height: 1.5;
+            -webkit-font-smoothing: grayscale;
+            overflow-x: hidden;
         }
 
-        .navbar {
-            padding: 2rem;
+        .mono {
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* Stark Layout */
+        .app-wrapper {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid var(--border);
+            min-height: 100vh;
         }
 
-        .navbar-brand {
-            font-size: 0.9rem;
+        nav.sidebar {
+            width: 280px;
+            border-right: 1px solid var(--border);
+            padding: 3rem 2rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: fixed;
+            height: 100vh;
+        }
+
+        .brand {
+            font-size: 1.2rem;
             font-weight: 600;
-            letter-spacing: 0.2em;
+            letter-spacing: -0.05em;
             text-transform: uppercase;
         }
 
         .nav-links {
+            margin-top: 4rem;
             display: flex;
-            gap: 2rem;
+            flex-direction: column;
+            gap: 1.5rem;
         }
 
         .nav-links a {
-            color: var(--text-muted);
+            color: var(--gray-400);
             text-decoration: none;
-            font-size: 0.75rem;
+            font-size: 0.8rem;
             text-transform: uppercase;
+            letter-spacing: 0.15em;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            color: var(--white);
+        }
+
+        .nav-footer {
+            color: var(--gray-700);
+            font-size: 0.65rem;
             letter-spacing: 0.1em;
-            transition: color 0.2s ease;
+            text-transform: uppercase;
         }
 
-        .nav-links a:hover {
-            color: var(--text-main);
+        main {
+            margin-left: 280px;
+            width: calc(100% - 280px);
+            padding: 5rem 10% 5rem 5rem;
         }
 
-        .container {
-            max-width: 900px;
-            margin: 5rem auto;
-            padding: 0 2rem;
-        }
-
+        /* Typography */
         h1 {
-            font-size: 1.25rem;
-            font-weight: 500;
-            margin-bottom: 4rem;
-            letter-spacing: -0.01em;
+            font-size: 3rem;
+            font-weight: 300;
+            letter-spacing: -0.07em;
+            margin-bottom: 5rem;
             text-transform: lowercase;
         }
 
-        .table-container {
+        /* Elements */
+        .stark-table {
             width: 100%;
+            border-collapse: collapse;
             margin-top: 2rem;
         }
 
-        .table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 0.85rem;
-        }
-
-        .table th {
+        .stark-table th {
             text-align: left;
             padding: 1rem 0;
             border-bottom: 1px solid var(--border);
-            color: var(--text-muted);
-            font-weight: 400;
+            color: var(--gray-600);
+            font-size: 0.7rem;
             text-transform: uppercase;
-            font-size: 0.65rem;
-            letter-spacing: 0.1em;
+            letter-spacing: 0.2em;
+            font-weight: 400;
         }
 
-        .table td {
-            padding: 1.5rem 0;
+        .stark-table td {
+            padding: 2rem 0;
             border-bottom: 1px solid var(--border);
+            font-size: 0.9rem;
+            font-weight: 300;
         }
 
         .btn {
-            padding: 0.5rem 0;
-            font-size: 0.7rem;
-            cursor: pointer;
-            text-decoration: none;
             display: inline-block;
-            border: none;
+            padding: 1rem 2rem;
+            border: 1px solid var(--white);
             background: transparent;
-            color: var(--text-muted);
-            transition: color 0.2s ease;
+            color: var(--white);
+            text-decoration: none;
             text-transform: uppercase;
-            letter-spacing: 0.1em;
-            margin-right: 1.5rem;
+            font-size: 0.7rem;
+            letter-spacing: 0.2em;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         .btn:hover {
-            color: var(--text-main);
+            background: var(--white);
+            color: var(--black);
         }
 
-        .btn-primary {
-            color: var(--text-main);
-            border-bottom: 1px solid var(--text-main);
-            padding-bottom: 2px;
+        .btn-text {
+            border: none;
+            padding: 0;
+            color: var(--gray-400);
+            margin-right: 2rem;
         }
 
+        .btn-text:hover {
+            background: transparent;
+            color: var(--white);
+            text-decoration: underline;
+        }
+
+        /* Forms */
         .form-group {
-            margin-bottom: 3rem;
+            margin-bottom: 4rem;
+            max-width: 600px;
         }
 
-        .form-group label {
+        .form-label {
             display: block;
-            margin-bottom: 0.75rem;
-            color: var(--text-muted);
-            font-size: 0.65rem;
+            color: var(--gray-600);
+            font-size: 0.7rem;
             text-transform: uppercase;
-            letter-spacing: 0.1em;
+            letter-spacing: 0.2em;
+            margin-bottom: 1rem;
         }
 
         .form-control {
             width: 100%;
-            padding: 0.5rem 0;
             background: transparent;
             border: none;
             border-bottom: 1px solid var(--border);
-            color: var(--text-main);
+            color: var(--white);
+            padding: 0.75rem 0;
+            font-size: 1.1rem;
             outline: none;
-            font-size: 0.95rem;
-            transition: border-color 0.2s ease;
-            border-radius: 0;
+            transition: border-color 0.4s ease;
         }
 
         .form-control:focus {
-            border-bottom-color: var(--text-main);
+            border-bottom-color: var(--white);
         }
 
-        select.form-control {
-            appearance: none;
-            cursor: pointer;
+        textarea.form-control {
+            border: 1px solid var(--border);
+            padding: 1rem;
         }
 
+        /* Alerts */
         .alert {
-            padding: 1rem 0;
-            margin-bottom: 3rem;
-            border-bottom: 1px solid rgba(255,255,255,0.2);
-            font-size: 0.8rem;
-            color: var(--text-main);
-            text-transform: lowercase;
+            position: fixed;
+            top: 0;
+            right: 0;
+            padding: 2rem;
+            background: var(--white);
+            color: var(--black);
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            z-index: 1000;
+            animation: slideIn 0.5s ease;
         }
 
-        .flex-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: baseline;
-            margin-bottom: 4rem;
+        @keyframes slideIn {
+            from { transform: translateX(100%); }
+            to { transform: translateX(0); }
+        }
+
+        /* Nihilism Accents */
+        .void-marker {
+            color: var(--gray-800);
+            user-select: none;
+            pointer-events: none;
+        }
+
+        ::selection {
+            background: var(--white);
+            color: var(--black);
         }
     </style>
 </head>
 <body>
-    <nav class="navbar">
-        <div class="navbar-brand">Control</div>
-        <div class="nav-links">
-            <a href="/">Home</a>
-            <a href="{{ route('supplier.index') }}">Suppliers</a>
-            <a href="{{ route('produk.index') }}">Products</a>
-        </div>
-    </nav>
-
-    <div class="container">
-        @if(session('success'))
-            <div class="alert">
-                {{ session('success') }}
+    <div class="app-wrapper">
+        <nav class="sidebar">
+            <div>
+                <div class="brand">Control <span class="void-marker">/ Void</span></div>
+                <div class="nav-links">
+                    <a href="/" class="{{ request()->is('/') ? 'active' : '' }}">Existence</a>
+                    <a href="{{ route('supplier.index') }}" class="{{ request()->is('suppliers*') ? 'active' : '' }}">Origins</a>
+                    <a href="{{ route('produk.index') }}" class="{{ request()->is('produk*') ? 'active' : '' }}">Manifestations</a>
+                </div>
             </div>
-        @endif
+            <div class="nav-footer">
+                Nothingness is structured.
+            </div>
+        </nav>
 
-        @yield('content')
+        <main>
+            @if(session('success'))
+                <div class="alert">
+                    {{ session('success') }}
+                </div>
+            @endif
+
+            @yield('content')
+        </main>
     </div>
+
+    <script>
+        // Auto hide alert
+        setTimeout(() => {
+            const alert = document.querySelector('.alert');
+            if (alert) alert.style.display = 'none';
+        }, 5000);
+    </script>
 </body>
 </html>
